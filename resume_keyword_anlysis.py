@@ -1,7 +1,9 @@
 import os
 import glob
 import docx2txt
+import subprocess
 from collections import Counter
+
 
 
 class File:
@@ -9,12 +11,16 @@ class File:
         self.filepath = filepath
 
     def read_text(self):
-        text = ''
         if str(self.filepath).endswith('.docx'):
             text = docx2txt.process(str(self.filepath))
             return text
         elif str(self.filepath).endswith('.hwp'):
-            pass
+            text = subprocess.check_output('hwp5txt test_hwp.hwp', shell=True, encoding='UTF-8')
+            return text
+
+
+def analyzing_keyword():  # 작성 필요
+    pass
 
 
 def get_file_path(path):
@@ -28,12 +34,13 @@ def get_file_path(path):
 
 
 def main():
-    DEFAULT_FILEPATH = '/Users/limkaram/PycharmProjects/resume_keyword_analysis'
-    file_list = get_file_path(DEFAULT_FILEPATH)
+    file_list = get_file_path(os.getcwd())
     print(file_list)
 
-    templ = docx2txt.process(file_list[1])
-    print(templ)
+    # templ = docx2txt.process(file_list[1])
+    # print(templ)
+    file = File(file_list[1])
+    file.read_text()
 
 
 if __name__ == '__main__':

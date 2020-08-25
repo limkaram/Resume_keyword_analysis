@@ -5,6 +5,8 @@ import subprocess
 from konlpy.tag import Okt
 from collections import Counter
 
+DEFALUT_DICECTORY_PATH = os.getcwd()  # 분석 예정 파일 저장되어 있는 폴더 PATH
+
 
 class File:
     def __init__(self, filepath):
@@ -29,25 +31,42 @@ class File:
         return text.nouns(raw_text)
 
 
-def get_file_path(path):
+def get_file_list(path):
     files = glob.glob(path + '/*')
     if files:
         files = [file for file in files if file.endswith('.docx') or file.endswith('.hwp')]
         return files
-    else:
-        print('분석할 파일이 폴더내에 존재 하지 않습니다.')
-        # print('기본 디렉토리 위치 : ', DEFAULT_FILEPATH)
 
 
 def main():
-    file_list = get_file_path(os.getcwd())
-    print(file_list)
+    file_list = get_file_list(DEFALUT_DICECTORY_PATH)
+    if not file_list:
+        print('키워드 분석 가능한 파일이 폴더내 존재하지 않습니다.')
+    while file_list:
+        print('==분석 가능한 파일 목록==')
+        for index, path_of_file in enumerate(file_list):
+            print('{0}. {1}'.format(index+1, os.path.basename(path_of_file)))
+        print('\n')
+        print('키워드 분석하고자 하는 파일 번호 입력')
+        print('※모든 파일을 일괄 분석코자 하는 경우 "0" 입력')
+
+        try:
+            input_num = int(input('입력 >>'))
+            if input_num > len(file_list)-1:  # 입력이 file_list 범위를 넘는 경우
+                print('올바르지 않은 입력입니다.')
+            elif input_num == 0:  # 모든 파일 일괄 분석 경우
+                pass
+            elif 1 <= input_num <= len(file_list):  # 원하는 하나의 파일을 분석하는 경우
+                pass
+        except ValueError:
+            print('Warning : 올바르지 않은 입력, 정수 입력 필요.\n')
+
 
     # templ = docx2txt.process(file_list[1])
     # print(templ)
-    file = File(file_list[1])
-    file_text = file.read_text()
-    print(file.analyze_text(file_text))
+    # file = File(file_list[1])
+    # file_text = file.read_text()
+    # print(file.analyze_text(file_text))
 
 
 if __name__ == '__main__':

@@ -55,14 +55,16 @@ def main():
 
         try:
             input_num = int(input('입력 >> '))
+            print('키워드 분석 중...')
             if input_num > len(file_list):  # 입력이 file_list 범위를 넘는 경우
                 print('올바르지 않은 입력입니다.')
             elif input_num == 0:  # 모든 파일 일괄 분석 경우
                 pass
             elif 1 <= input_num <= len(file_list):  # 원하는 하나의 파일을 분석하는 경우
-                analysis_target_file = File(file_list[input_num-1])
+                analysis_target_file = File(file_list[input_num-1])  # 입력한 숫자는 리스트 요소의 인덱스보다 +1이므로 -1 해줌
                 result = analysis_target_file.read_text()
                 print(result)
+                print('키워드 분석 완료!!!')
         except ValueError:
             print('Warning : 올바르지 않은 입력, 정수 입력 필요.\n')
 

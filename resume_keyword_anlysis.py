@@ -24,11 +24,12 @@ class File:
 
     def analyze_text(self, raw_text):
         text = Okt()
-        # text.nouns(raw_text) : 명사 추출
-        # text.morphs(raw_text) : 형태소 추출
-        # text.pos(raw_text) : 품사 부착하여 추출
-        # print(okt.tagset) : 각 품사 태그의 기호와 의미 확인 가능
-        return text.nouns(raw_text)
+        # print(text.tagset)  # 각 품사 태그의 기호와 의미 확인 가능
+        # print('\n')
+        # text.nouns(raw_text)  # 명사 추출
+        # text.morphs(raw_text)  # 형태소 추출
+        # text.pos(raw_text)  # 품사 부착하여 추출
+        # return text.nouns(raw_text)
 
 
 def get_file_list(path):
@@ -40,9 +41,11 @@ def get_file_list(path):
 
 def main():
     file_list = get_file_list(DEFALUT_DICECTORY_PATH)
-    if not file_list:
+
+    if len(file_list) == 0:
         print('키워드 분석 가능한 파일이 폴더내 존재하지 않습니다.')
-    while file_list:
+
+    while len(file_list) > 0:
         print('==분석 가능한 파일 목록==')
         for index, path_of_file in enumerate(file_list):
             print('{0}. {1}'.format(index+1, os.path.basename(path_of_file)))
@@ -51,22 +54,17 @@ def main():
         print('※모든 파일을 일괄 분석코자 하는 경우 "0" 입력')
 
         try:
-            input_num = int(input('입력 >>'))
-            if input_num > len(file_list)-1:  # 입력이 file_list 범위를 넘는 경우
+            input_num = int(input('입력 >> '))
+            if input_num > len(file_list):  # 입력이 file_list 범위를 넘는 경우
                 print('올바르지 않은 입력입니다.')
             elif input_num == 0:  # 모든 파일 일괄 분석 경우
                 pass
             elif 1 <= input_num <= len(file_list):  # 원하는 하나의 파일을 분석하는 경우
-                pass
+                analysis_target_file = File(file_list[input_num-1])
+                result = analysis_target_file.read_text()
+                print(result)
         except ValueError:
             print('Warning : 올바르지 않은 입력, 정수 입력 필요.\n')
-
-
-    # templ = docx2txt.process(file_list[1])
-    # print(templ)
-    # file = File(file_list[1])
-    # file_text = file.read_text()
-    # print(file.analyze_text(file_text))
 
 
 if __name__ == '__main__':
